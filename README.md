@@ -25,6 +25,33 @@ Due to redistribution restrictions, we cannot share the original or processed da
 
 [CMRxRecon 2023 dataset](https://cmrxrecon.github.io/Home.html)
 
+# Training
+```
+python train_CamCAN.py for the CamCAN dataset
+python train_CMR.py for the CMRxRecon dataset
+```
+Noted that you may need to customize your own dataloader. Add your customized dataloader to code/Functions.py
+
+# Inference
+```
+python test_CamCAN.py for the CamCAN dataset
+python test_CMR.py for the CMRxRecon dataset
+```
+
+# Publication
+If you make use of the code or if you found the code useful, please cite the paper in any resulting publications.
+- **CAR: Contrast-Agnostic Deformable Medical Image Registration with Contrast-Invariant Latent Regularization**  
+```
+@inproceedings{wang2024car,
+  title={CAR: Contrast-Agnostic Deformable Medical Image Registration with Contrast-Invariant Latent Regularization},
+  author={Wang, Yinsong and Du, Siyi and Zheng, Shaoming and Luo, Xinzhe and Qin, Chen},
+  booktitle={International Workshop on Biomedical Image Registration},
+  pages={308--318},
+  year={2024},
+  organization={Springer}
+}
+```
+
 ---
 
 🚧 Code is coming soon!
