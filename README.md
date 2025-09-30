@@ -1,8 +1,8 @@
-<h3 align="center">
+<h1 align="center">
   <font color="purple">
     CAR: Contrast-Agnostic Deformable Medical Image Registration with Contrast-Invariant Latent Regularization (WBIR 2024)
   </font>
-</h3>
+</h1>
 
 <p align="center">
   Offical Implementation of paper  
