@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="network.png" alt="network" width="400"/>
+  <img src="network.png" alt="network" width="1200"/>
 </p>
 
 ---
