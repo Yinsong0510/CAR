@@ -28,17 +28,19 @@ Due to redistribution restrictions, we cannot share the original or processed da
 - [CMRxRecon 2023 dataset](https://cmrxrecon.github.io/Home.html)  
 
 # Training
-For the CamCAN dataset
+For the CamCAN dataset, run
 - `python train_CamCAN.py`
-For the CMRxRecon dataset
+  
+For the CMRxRecon dataset, run
 - `python train_CMR.py`
 
 > Note: You may need to customize your own dataloader. Add your customized dataloader to <code>utils/Functions.py</code>.
 
 # Inference
-For the CamCAN dataset
+For the CamCAN dataset, run
 - `python test_CamCAN.py`
-For the CMRxRecon dataset
+  
+For the CMRxRecon dataset, run
 - `python test_CMR.py`
 
 # Publication
