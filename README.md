@@ -29,15 +29,15 @@ Due to redistribution restrictions, we cannot share the original or processed da
 
 # Training
 <code>
-python train_CamCAN.py  # for the CamCAN dataset<br>
+python train_CamCAN.py  # for the CamCAN dataset
 python train_CMR.py     # for the CMRxRecon dataset
 </code>
 
-> Note: You may need to customize your own dataloader. Add your customized dataloader to <code>code/Functions.py</code>.
+> Note: You may need to customize your own dataloader. Add your customized dataloader to <code>utils/Functions.py</code>.
 
 # Inference
 <code>
-python test_CamCAN.py  # for the CamCAN dataset<br>
+python test_CamCAN.py  # for the CamCAN dataset
 python test_CMR.py     # for the CMRxRecon dataset
 </code>
 
