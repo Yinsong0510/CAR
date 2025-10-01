@@ -1,7 +1,7 @@
 <h1 align="center">
   <font color="purple">
     CAR: Contrast-Agnostic Deformable Medical Image Registration with Contrast-Invariant Latent Regularization (WBIR 2024)  
-    <a href="[https://arxiv.org/abs/xxxx.xxxxx](https://arxiv.org/abs/2408.05341)" target="_blank" style="text-decoration:none; color:blue; font-size:24px;">[Paper]</a>
+    <a href="[paper link](https://arxiv.org/abs/2408.05341)" target="_blank" style="text-decoration:none; color:blue; font-size:24px;">[Paper]</a>
   </font>
 </h1>
 
@@ -31,8 +31,3 @@ Due to redistribution restrictions, we cannot share the original or processed da
 ```bash
 python train_CamCAN.py  # for the CamCAN dataset
 python train_CMR.py     # for the CMRxRecon dataset
-
-# Inference
-```bash
-python test_CamCAN.py  # for the CamCAN dataset
-python test_CMR.py     # for the CMRxRecon dataset
