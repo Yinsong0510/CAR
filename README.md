@@ -29,22 +29,17 @@ Due to redistribution restrictions, we cannot share the original or processed da
 
 # Training
 For the CamCAN dataset
-<code>
-python train_CamCAN.py
-</code>
-
+- `python train_CamCAN.py`
 For the CMRxRecon dataset
-<code>
-python train_CMR.py
-</code>
+- `python train_CMR.py`
 
 > Note: You may need to customize your own dataloader. Add your customized dataloader to <code>utils/Functions.py</code>.
 
 # Inference
-<code>
-python test_CamCAN.py  # for the CamCAN dataset
-python test_CMR.py     # for the CMRxRecon dataset
-</code>
+For the CamCAN dataset
+- `python test_CamCAN.py`
+For the CMRxRecon dataset
+- `python test_CMR.py`
 
 # Publication
 If you make use of the code or found it useful, please cite the paper:
