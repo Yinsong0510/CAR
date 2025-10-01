@@ -28,9 +28,14 @@ Due to redistribution restrictions, we cannot share the original or processed da
 - [CMRxRecon 2023 dataset](https://cmrxrecon.github.io/Home.html)  
 
 # Training
+For the CamCAN dataset
 <code>
-python train_CamCAN.py  # for the CamCAN dataset
-python train_CMR.py     # for the CMRxRecon dataset
+python train_CamCAN.py
+</code>
+
+For the CMRxRecon dataset
+<code>
+python train_CMR.py
 </code>
 
 > Note: You may need to customize your own dataloader. Add your customized dataloader to <code>utils/Functions.py</code>.
@@ -42,9 +47,7 @@ python test_CMR.py     # for the CMRxRecon dataset
 </code>
 
 # Publication
-<p align="center">
 If you make use of the code or found it useful, please cite the paper:
-</p>
 
 <p align="center">
 <b>CAR: Contrast-Agnostic Deformable Medical Image Registration with Contrast-Invariant Latent Regularization</b>
