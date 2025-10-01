@@ -1,7 +1,7 @@
 <h1 align="center">
   <font color="purple">
     CAR: Contrast-Agnostic Deformable Medical Image Registration with Contrast-Invariant Latent Regularization (WBIR 2024)  
-    <a href="https://arxiv.org/abs/xxxx.xxxxx" target="_blank" style="text-decoration:none; color:blue; font-size:24px;">[Paper]</a>
+    <a href="https://arxiv.org/abs/2408.05341" target="_blank" style="text-decoration:none; color:blue; font-size:24px;">[Paper]</a>
   </font>
 </h1>
 
@@ -28,22 +28,18 @@ Due to redistribution restrictions, we cannot share the original or processed da
 - [CMRxRecon 2023 dataset](https://cmrxrecon.github.io/Home.html)  
 
 # Training
-<p align="center">
 <code>
 python train_CamCAN.py  # for the CamCAN dataset<br>
 python train_CMR.py     # for the CMRxRecon dataset
 </code>
-</p>
 
 > Note: You may need to customize your own dataloader. Add your customized dataloader to <code>code/Functions.py</code>.
 
 # Inference
-<p align="center">
 <code>
 python test_CamCAN.py  # for the CamCAN dataset<br>
 python test_CMR.py     # for the CMRxRecon dataset
 </code>
-</p>
 
 # Publication
 <p align="center">
