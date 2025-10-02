@@ -21,7 +21,7 @@ def parse_args():
     parser.add_argument("--epochs", type=int, default=2000, help="number of total epochs")
     parser.add_argument("--batch_size", type=int, default=8, help="batch size per gpu")
     parser.add_argument("--proj_dim", type=int, default=32, help="projection head output dimension")
-    parser.add_argument("--datapath", type=str, default="../../T1Map_Training_mask", help="training data path")
+    parser.add_argument("--datapath", type=str, default="../T1Map_Training_mask", help="training data path")
     parser.add_argument("--image_size", type=tuple, default=(128, 128), help="image size")
     return parser.parse_args()
 

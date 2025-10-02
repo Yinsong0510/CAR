@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.utils.data as Data
-from utils.Functions import dice, one_hot, Dataset_Mapping_val
+from utils.Functions import dice, one_hot, Dataset_Mapping_val, calculate_jacobian_metrics
 from model.car_model import VxmDense
-from model.layers import SpatialTransformer, calculate_jacobian_metrics
+from model.layers import SpatialTransformer
 
 SAVEPATH = "../Log"
 ENC_NF = [128] * 4

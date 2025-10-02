@@ -6,7 +6,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from Functions import imgnorm_torch
+from utils.Functions import imgnorm_torch
 
 
 class GradlessGCReplayNonlinBlock(nn.Module):
@@ -83,10 +83,6 @@ class GINGroupConv(nn.Module):
 
     def forward(self, x_in):
         x_in = x_in.repeat(1, self.in_channel, 1, 1)
-        # x, y = torch.meshgrid(torch.arange(x_in.shape[2]), torch.arange(x_in.shape[3]))
-        # x = x.unsqueeze(0).unsqueeze(0).float().cuda() / x_in.shape[2]
-        # y = y.unsqueeze(0).unsqueeze(0).float().cuda() / x_in.shape[3]
-        # x_in = torch.cat([x_in, x, y], dim=1)
         if isinstance(x_in, list):
             x_in = torch.cat(x_in, dim=0)
 

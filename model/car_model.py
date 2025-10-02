@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 from torch.distributions.normal import Normal
 
-from layers import ResizeTransform, VecInt, SpatialTransformer
-from modelio import LoadableModel, store_config_args, default_unet_features
+from model.layers import ResizeTransform, VecInt, SpatialTransformer
+from model.modelio import LoadableModel, store_config_args, default_unet_features
 
 
 class Unet(nn.Module):
@@ -329,48 +329,4 @@ class Proj_Head_Last(nn.Module):
         dense = torch.nn.functional.normalize(dense, dim=1)
 
         return vec, dense
-
-
-class Proj_Head(nn.Module):
-    def __init__(self, in_dim, out_dim):
-        super(Proj_Head, self).__init__()
-        self.fc = nn.Linear(in_dim, out_dim)
-        self.dense = nn.Conv2d(in_dim, out_dim, 1, stride=1, padding=0)
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-
-    def forward(self, x_list):
-        vec_list = []
-        dense_list = []
-        for x in x_list:
-            vec = self.avgpool(x)
-            vec = torch.flatten(vec, 1)
-            vec = self.fc(vec)
-            dense = self.dense(x)
-            vec = torch.nn.functional.normalize(vec, dim=1)
-            dense = torch.nn.functional.normalize(dense, dim=1)
-            vec_list.append(vec)
-            dense_list.append(dense)
-        return vec_list, dense_list
-
-
-class Proj_Head_Sep(nn.Module):
-    def __init__(self, in_dim, out_dim):
-        super(Proj_Head_Sep, self).__init__()
-        self.fc = nn.Linear(in_dim, in_dim//4)
-        self.dense = nn.Conv2d(in_dim, in_dim, 1, stride=1, padding=1, groups=in_dim)
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-
-    def forward(self, x_list):
-        vec_list = []
-        dense_list = []
-        for x in x_list:
-            # vec = self.avgpool(x)
-            # vec = torch.flatten(vec, 1)
-            # vec = self.fc(vec)
-            dense = self.dense(x)
-            # vec = torch.nn.functional.normalize(vec, dim=1)
-            dense = torch.nn.functional.normalize(dense, dim=1)
-            # vec_list.append(vec)
-            dense_list.append(dense)
-        return vec_list, dense_list
 

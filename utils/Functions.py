@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torch.utils.data as Data
 import torch.nn.functional as F
+import SimpleITK as sitk
 
 
 # (grid[0, :, :, :, 0] - (size_tensor[3] / 2)) / size_tensor[3] * 2
@@ -354,52 +355,35 @@ def dice(im1, atlas):
     return dice / num_count
 
 
-def dice_cardiac(im1, atlas):
-    unique_class = np.unique(atlas)
-    myo_dice = 0
-    lv_dice = 0
-    rv_dice = 0
-    for i in unique_class:
-        if (i == 0) or ((im1 == i).sum() == 0) or ((atlas == i).sum() == 0):
-            continue
+def calculate_jacobian_metrics(disp):
+    """
+    Calculate Jacobian related regularity metrics.
 
-        sub_dice = np.sum(atlas[im1 == i] == i) * 2.0 / (np.sum(im1 == i) + np.sum(atlas == i))
-        if i == 1:
-            lv_dice = sub_dice
-        elif i == 2:
-            myo_dice = sub_dice
-        elif i == 3:
-            rv_dice = sub_dice
+    Args:
+        disp: (numpy.ndarray, shape (N, ndim, *sizes) Displacement field
 
-    return myo_dice, lv_dice, rv_dice
+    Returns:
+        folding_ratio: (scalar) Folding ratio (ratio of Jacobian determinant < 0 points)
+        mag_grad_jac_det: (scalar) Mean magnitude of the spatial gradient of Jacobian determinant
+    """
+    disp_n = np.moveaxis(disp, 0, -1)  # (*sizes, ndim)
+    jac_det_n = calculate_jacobian_det(disp_n)
+    folding_ratio = (jac_det_n < 0).sum() / np.prod(jac_det_n.shape)
+    mag_grad_jac_det = np.abs(np.gradient(jac_det_n)).mean()
+    return folding_ratio, mag_grad_jac_det
 
 
-def pair_fea(fea):
-    batch = fea.shape[0]
-    feas = torch.chunk(fea, batch, dim=0)
-    comb_fea = list(itertools.combinations(feas, 2))
+def calculate_jacobian_det(disp):
+    """
+    Calculate Jacobian determinant of displacement field of one image/volume (2D/3D)
 
-    return comb_fea
+    Args:
+        disp: (numpy.ndarray, shape (*sizes, ndim)) Displacement field
 
-def fft_filter(X):
-    _, _, H, W = X.size()
-    X_fft = torch.fft.fftn(X, dim=(-2, -1))
-    x_shiftn = torch.fft.fftshift(X_fft)
-    X_fft_mask = x_shiftn * mask_gen_rect(H, W, hf_weights=0.0, lf_weights=1.5, radius=30)
-    x_ishift = torch.fft.ifftshift(X_fft_mask)
-    i_X_fft = torch.abs(torch.fft.ifftn(x_ishift, dim=(-2, -1)))
-    X_fft_norm = imgnorm_torch(i_X_fft)
-
-    return X_fft_norm
-
-
-def mask_gen_rect(h, w, radius=30, hf_weights=0.0, lf_weights=1.5):
-    mask = torch.full((1, 1, h, w), hf_weights).cuda()
-
-    # Define the center coordinates
-    center_x, center_y = h // 2, w // 2
-
-    # Set the central 8x8 area to 1.5
-    mask[:, :, center_x - radius:center_x + radius, center_y - radius:center_y + radius] = lf_weights
-
-    return mask
+    Returns:
+        jac_det: (numpy.adarray, shape (*sizes) Point-wise Jacobian determinant
+    """
+    disp_img = sitk.GetImageFromArray(disp, isVector=True)
+    jac_det_img = sitk.DisplacementFieldJacobianDeterminant(disp_img)
+    jac_det = sitk.GetArrayFromImage(jac_det_img)
+    return jac_det

@@ -1,12 +1,7 @@
-import SimpleITK as sitk
-import torch
 import torch.nn as nn
 import torch.nn.functional as nnf
-import numpy as np
-import torchvision
 
-from Functions import imgnorm_torch
-from modelio import generate_grid
+from model.modelio import generate_grid
 
 
 class SpatialTransformer(nn.Module):
@@ -97,70 +92,3 @@ class ResizeTransform(nn.Module):
 
         # don't do anything if resize is 1
         return x
-
-
-def calculate_jacobian_metrics(disp):
-    """
-    Calculate Jacobian related regularity metrics.
-
-    Args:
-        disp: (numpy.ndarray, shape (N, ndim, *sizes) Displacement field
-
-    Returns:
-        folding_ratio: (scalar) Folding ratio (ratio of Jacobian determinant < 0 points)
-        mag_grad_jac_det: (scalar) Mean magnitude of the spatial gradient of Jacobian determinant
-    """
-    disp_n = np.moveaxis(disp, 0, -1)  # (*sizes, ndim)
-    jac_det_n = calculate_jacobian_det(disp_n)
-    folding_ratio = (jac_det_n < 0).sum() / np.prod(jac_det_n.shape)
-    mag_grad_jac_det = np.abs(np.gradient(jac_det_n)).mean()
-    return folding_ratio, mag_grad_jac_det
-
-
-def calculate_jacobian_det(disp):
-    """
-    Calculate Jacobian determinant of displacement field of one image/volume (2D/3D)
-
-    Args:
-        disp: (numpy.ndarray, shape (*sizes, ndim)) Displacement field
-
-    Returns:
-        jac_det: (numpy.adarray, shape (*sizes) Point-wise Jacobian determinant
-    """
-    disp_img = sitk.GetImageFromArray(disp, isVector=True)
-    jac_det_img = sitk.DisplacementFieldJacobianDeterminant(disp_img)
-    jac_det = sitk.GetArrayFromImage(jac_det_img)
-    return jac_det
-
-
-def generate_synth(seg):
-    _, _, x, y = seg.shape
-    image = torch.zeros_like(seg, dtype=torch.float32)
-    unique_labels = torch.unique(seg)
-    for label in unique_labels:
-
-        mask = (seg == label).float()
-        num_voxels = torch.sum(mask)
-
-        if num_voxels > 0:
-            mean = np.random.uniform(25, 225)
-            std = np.random.uniform(5, 25)
-
-            normal_samples = torch.normal(mean=mean, std=std, size=seg.size()).float().cuda()
-
-            image += mask * normal_samples
-    std_gau = list(np.random.uniform(0, 1, 2))
-    std_gau.sort()
-    gaussian_ker = torchvision.transforms.GaussianBlur(kernel_size=5, sigma=std_gau).cuda()
-    image = gaussian_ker(image)
-    std_bias = np.random.uniform(0, 0.3)
-    bias_field = torch.normal(mean=0, std=std_bias, size=(1, 1, 5, 6)).float().cuda()
-    bias_field = torch.nn.functional.interpolate(bias_field, size=(160, 192), mode='bilinear', align_corners=True)
-    bias_field = torch.exp(bias_field)
-    image = image * bias_field
-    image = imgnorm_torch(image)
-    exp_norm = torch.normal(mean=0, std=0.25, size=(1,)).float().cuda()
-    image = torch.pow(image, torch.exp(exp_norm))
-    image = imgnorm_torch(image)
-
-    return image
